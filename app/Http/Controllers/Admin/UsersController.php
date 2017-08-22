@@ -6,9 +6,19 @@ use Dark\Models\User;
 use Illuminate\Http\Request;
 use Dark\Http\Controllers\Controller;
 use Dark\Forms\UserForm;
+use Kris\LaravelFormBuilder\FormBuilder;
 
 class UsersController extends Controller
 {
+    protected $formbuilder;
+    protected $formclass = UserForm::class;
+    protected $formOptions;
+
+    public function __construct(FormBuilder $formBuilder)
+    {
+        $this->formbuilder = $formBuilder;
+        $this->formOptions = ['url'  => route('admin.users.store'),'method' => 'POST'];
+    } 
     /**
      * Display a listing of the resource.
      *
@@ -16,7 +26,8 @@ class UsersController extends Controller
      */
     public function index()
     {
-        //
+        $users = User::paginate();
+        return view('admin.users.index', compact('users'));
     }
 
     /**
@@ -26,10 +37,7 @@ class UsersController extends Controller
      */
     public function create()
     {
-        $form = \FormBuilder::create(UserForm::class, [
-           'url'  => route('admin.users.store'),
-           'method' => 'POST'
-        ]);
+        $form = $this->formbuilder->create($this->formclass, $this->formOptions);
         return view('admin.users.create', compact('form'));
     }
 
@@ -48,6 +56,10 @@ class UsersController extends Controller
                 ->withErrors($form->getErrors())
                 ->withInput();
         }
+        $data = $form->getFieldValues();
+        $data['password'] = str_random(6);
+        User::create($data);
+        return redirect()->route('admin.users.index');
     }
 
     /**
