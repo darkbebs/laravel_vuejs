@@ -9,7 +9,13 @@ class UserForm extends Form
     public function buildForm()
     {
         $this
-            ->add('name', 'text')
-            ->add('email', 'email');
+            ->add('name', 'text', [
+                'label' => 'Nome',
+                'rules' => 'required|max:255|min:3'
+            ])
+            ->add('email', 'email', [
+                'label' => 'Email',
+                'rules' => 'required|max:255|unique:users'
+            ]);
     }
 }
