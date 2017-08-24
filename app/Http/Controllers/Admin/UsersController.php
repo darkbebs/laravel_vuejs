@@ -17,7 +17,7 @@ class UsersController extends Controller
     public function __construct(FormBuilder $formBuilder)
     {
         $this->formbuilder = $formBuilder;
-        $this->formOptions = ['url'  => route('admin.users.store'),'method' => 'POST'];
+        $this->formOptionsCreate = ['url'  => route('admin.users.store'),'method' => 'POST'];
     } 
     /**
      * Display a listing of the resource.
@@ -37,7 +37,7 @@ class UsersController extends Controller
      */
     public function create()
     {
-        $form = $this->formbuilder->create($this->formclass, $this->formOptions);
+        $form = $this->formbuilder->create($this->formclass, $this->formOptionsCreate);
         return view('admin.users.create', compact('form'));
     }
 
@@ -49,7 +49,7 @@ class UsersController extends Controller
      */
     public function store(Request $request)
     {
-        $form = \FormBuilder::create(UserForm::class);
+        $form = $this->formbuilder->create($this->formclass);
         if(!$form->isValid()){
             return redirect()
                 ->back()
@@ -81,7 +81,12 @@ class UsersController extends Controller
      */
     public function edit(User $user)
     {
-        //
+        $form = $this->formbuilder->create($this->formclass, [
+                'url'  => route('admin.users.update', ['user' => $user->id]),
+                'method' => 'PUT',
+                'model' => $user
+        ]);
+        return view('admin.users.edit', compact('form'));
     }
 
     /**
@@ -91,9 +96,20 @@ class UsersController extends Controller
      * @param  \Dark\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, User $user)
+    public function update(User $user)
     {
-        //
+        $form = $this->formbuilder->create($this->formclass,[
+            'data' => ['id' => $user->id]
+        ]);
+        if(!$form->isValid()){
+            return redirect()
+                ->back()
+                ->withErrors($form->getErrors())
+                ->withInput();
+        }
+        $data = $form->getFieldValues();
+        $user->update($data);
+        return redirect()->route('admin.users.index');
     }
 
     /**
