@@ -233,6 +233,7 @@ return [
         'FormBuilder' => Kris\LaravelFormBuilder\Facades\FormBuilder::class,
         'Table' => Bootstrapper\Facades\Table::class,
         'Button' => Bootstrapper\Facades\Button::class,
+        'Icon' => Bootstrapper\Facades\Icon::class,
     ],
 
 ];

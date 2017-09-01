@@ -70,7 +70,13 @@ class UsersController extends Controller
      */
     public function show(User $user)
     {
-        //
+       $formdelete = $this->formbuilder->plain([
+                    'id' => 'form-delete',
+                    'url' => route('admin.users.destroy', ['user' => $user->id]),
+                    'method' => 'DELETE',
+                    'style' => 'display:none'
+                ]);
+        return view('admin.users.show', compact('user', 'formdelete'));
     }
 
     /**
@@ -120,6 +126,7 @@ class UsersController extends Controller
      */
     public function destroy(User $user)
     {
-        //
+        $user->delete();
+        return redirect()->route('admin.users.index');
     }
 }

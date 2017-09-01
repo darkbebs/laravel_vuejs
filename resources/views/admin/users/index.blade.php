@@ -4,8 +4,9 @@
     <div class="container">
         <div class="row">
             <h3>Listagem de Usuário</h3>
-            {!! Button::primary('Novo usuário')->asLinkTo(route('admin.users.create')) !!}
+            {!! Button::primary(Icon::plus().' Novo usuário')->asLinkTo(route('admin.users.create')) !!}
         </div>
+        <br/>
         <div class="row">
             {!! 
             Table::withContents($users->items())
@@ -15,8 +16,8 @@
                 ->callback('Ações', function($field, $model){
                     $linkEdit = route('admin.users.edit', ['user' => $model->id]);
                     $linkShow = route('admin.users.show', ['user' => $model->id]);
-                    return Button::link('Editar')->asLinkTo($linkEdit). ' | '
-                          .Button::link('Ver')->asLinkTo($linkShow);
+                    return Button::link(Icon::pencil() .' Editar')->asLinkTo($linkEdit). ' | '
+                          .Button::link(Icon::create('eye-open').' Ver')->asLinkTo($linkShow);
                 })
             !!}
         </div>
