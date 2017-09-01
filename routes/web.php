@@ -17,12 +17,16 @@ Route::get('/', function () {
 
 Route::prefix('admin')->group(function(){
     Auth::routes();
+
     Route::group([
         'namespace' => 'Admin\\',
         'as' => 'admin.',
         'middleware' => 'auth'
     ], function() {
         Route::resource('users', 'UsersController');
+        Route::get('home', function() {
+            return 'Home';
+        })->name('home');
     });
 });
 

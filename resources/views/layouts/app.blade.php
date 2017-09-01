@@ -15,6 +15,7 @@
 </head>
 <body>
     <div id="app">
+        {!! Navbar::withBrand(config('app.name')) !!}
         <nav class="navbar navbar-default navbar-static-top navbar-inverse">
             <div class="container">
                 <div class="navbar-header">
